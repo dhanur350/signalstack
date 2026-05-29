@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthService } from './auth.service';
-import { loginSchema, verifyTokenSchema } from './auth.schemas';
+import { loginSchema, verifyTokenSchema, registerSchema } from './auth.schemas';
 import { logger } from '../../utils/logger';
 
 export class AuthController {
@@ -13,6 +13,19 @@ export class AuthController {
       const result = await AuthService.login(email, password);
 
       res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async register(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password, firstName, lastName } = registerSchema.parse(req.body);
+      const result = await AuthService.register(email, password, firstName, lastName);
+      res.status(201).json({
         success: true,
         data: result,
       });

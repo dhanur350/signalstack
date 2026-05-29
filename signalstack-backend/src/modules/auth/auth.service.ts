@@ -73,4 +73,49 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     return bcrypt.hash(password, salt);
   }
+
+  static async register(email: string, password: string, firstName: string, lastName: string) {
+    try {
+      // Check if manager already exists
+      const existingManager = await prisma.manager.findUnique({
+        where: { email },
+      });
+
+      if (existingManager) {
+        throw new Error('Manager with this email already exists');
+      }
+
+      // Hash password
+      const hashedPassword = await this.hashPassword(password);
+
+      // Create manager
+      const manager = await prisma.manager.create({
+        data: {
+          email,
+          password: hashedPassword,
+          firstName,
+          lastName,
+        },
+      });
+
+      logger.info({ managerId: manager.id, email }, 'Manager registered successfully');
+
+      // Generate token
+      const token = JwtService.generateToken({
+        id: manager.id,
+        email: manager.email,
+      });
+
+      return {
+        id: manager.id,
+        email: manager.email,
+        firstName: manager.firstName,
+        lastName: manager.lastName,
+        token,
+      };
+    } catch (error) {
+      logger.error(error, 'Registration error');
+      throw error;
+    }
+  }
 }

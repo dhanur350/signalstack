@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import { API_PREFIX, routes } from './routes/route';
 import { healthRoutes } from './routes/health';
 import { authRoutes } from './modules/auth/auth.routes';
+import { employeeRoutes } from './modules/employee/employee.routes';
+import { analyticsRoutes } from './modules/analytics/analytics.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { config, validateConfig } from './config/config';
 import { logger } from './utils/logger';
@@ -21,8 +23,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use(`${API_PREFIX}${routes.authLogin}`, authRoutes);
-app.use(`${API_PREFIX}${routes.authVerify}`, authRoutes);
+app.use(`${API_PREFIX}${routes.auth}`, authRoutes);
+app.use(`${API_PREFIX}${routes.employees}`, employeeRoutes);
+app.use(`${API_PREFIX}${routes.analytics}`, analyticsRoutes);
 app.use(`${API_PREFIX}${routes.health}`, healthRoutes);
 
 // 404 handler

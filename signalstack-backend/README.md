@@ -66,8 +66,23 @@ src/
 ├── middleware/          # Express middleware (auth, error handling)
 ├── modules/            # Feature modules
 │   ├── auth/           # Authentication module
-│   ├── employee/       # Employee management (Phase 2)
-│   ├── analytics/      # Analytics (Phase 3)
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── jwt.service.ts
+│   │   ├── auth.routes.ts
+│   │   └── auth.schemas.ts
+│   ├── employee/       # Employee management (Phase 2) ✅
+│   │   ├── employee.controller.ts
+│   │   ├── employee.service.ts
+│   │   ├── employee.repository.ts
+│   │   ├── employee.routes.ts
+│   │   └── employee.schemas.ts
+│   ├── analytics/      # Analytics (Phase 3) ✅
+│   │   ├── analytics.controller.ts
+│   │   ├── analytics.service.ts
+│   │   ├── analytics.repository.ts
+│   │   ├── analytics.routes.ts
+│   │   └── analytics.schemas.ts
 │   └── insights/       # AI insights (Phase 4)
 ├── routes/             # Route definitions
 ├── types/              # TypeScript types and interfaces
@@ -82,9 +97,9 @@ seed/                   # Database seeding scripts
 tests/                  # Unit and integration tests
 ```
 
-## API Endpoints (Phase 1)
+## API Endpoints
 
-### Authentication
+### Phase 1 - Authentication
 - `POST /api/v1/auth/login` - Manager login
   ```json
   {
@@ -99,6 +114,104 @@ tests/                  # Unit and integration tests
     "token": "eyJhbGciOiJIUzI1NiIs..."
   }
   ```
+
+### Phase 2 - Employee Management (All require JWT authentication)
+
+#### Create Employee
+- `POST /api/v1/employees`
+  ```json
+  {
+    "employeeId": "EMP001",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "department": "Engineering",
+    "role": "Senior Engineer",
+    "country": "US",
+    "salary": 150000,
+    "currency": "USD",
+    "employmentStatus": "ACTIVE",
+    "joiningDate": "2023-01-15"
+  }
+  ```
+
+#### List Employees (with pagination and filtering)
+- `GET /api/v1/employees?page=1&limit=20&department=Engineering&country=US&status=ACTIVE&minSalary=100000&maxSalary=200000&search=John&sortBy=salary&sortOrder=DESC`
+
+#### Get Employee by ID
+- `GET /api/v1/employees/:id`
+
+#### Update Employee
+- `PUT /api/v1/employees/:id`
+  ```json
+  {
+    "firstName": "Jane",
+    "salary": 160000
+  }
+  ```
+
+#### Soft Delete Employee
+- `DELETE /api/v1/employees/:id`
+
+#### Restore Employee
+- `POST /api/v1/employees/:id/restore`
+
+#### Search Employees
+- `GET /api/v1/employees/search?q=john`
+
+#### Get Employees by Department
+- `GET /api/v1/employees/department/:department`
+
+### Query Parameters for List Employees
+
+The list employees endpoint supports powerful filtering and sorting:
+
+- `page` - Page number (default: 1)
+- `limit` - Items per page (default: 20, max: 100)
+- `department` - Filter by department (case-insensitive)
+- `country` - Filter by country (case-insensitive)
+- `role` - Filter by role (case-insensitive)
+- `status` - Filter by employment status (ACTIVE, INACTIVE)
+- `minSalary` - Minimum salary range
+- `maxSalary` - Maximum salary range
+- `search` - Search in firstName, lastName, email, employeeId
+- `sortBy` - Sort field (salary, firstName, joiningDate, createdAt)
+- `sortOrder` - Sort direction (ASC, DESC)
+
+### Phase 3 - Analytics (All require JWT authentication)
+
+#### Total Compensation Spend
+- `GET /api/v1/analytics/total-spend` - Total salary spend, employee count, average salary
+
+#### Average Salary by Department
+- `GET /api/v1/analytics/avg-by-department` - Average salary grouped by department
+
+#### Average Salary by Country
+- `GET /api/v1/analytics/avg-by-country` - Average salary grouped by country
+
+#### Highest Paid Departments
+- `GET /api/v1/analytics/highest-departments?limit=5` - Top N departments by average salary
+
+#### Salary Distribution
+- `GET /api/v1/analytics/salary-distribution` - Min, max, average, median, percentiles
+
+#### Employee Count Statistics
+- `GET /api/v1/analytics/employee-count` - Active vs inactive employee count with percentages
+
+#### Top Earners
+- `GET /api/v1/analytics/top-earners?limit=10` - Top N highest paid employees
+
+#### Top Earners by Department
+- `GET /api/v1/analytics/top-earners/:department?limit=5` - Top N earners in a department
+
+#### Employees Above Salary
+- `GET /api/v1/analytics/above-salary?salary=100000` - Employees earning above specified salary
+
+#### Highest Payroll Countries
+- `GET /api/v1/analytics/highest-payroll-countries?limit=5` - Countries with highest total payroll
+
+#### Salary Growth by Tenure
+- `GET /api/v1/analytics/salary-by-tenure` - Average salary by tenure groups (0-1y, 1-3y, 3-5y, 5-10y, 10+y)
 
 ### Health Check
 - `GET /api/v1/health` - System health check
@@ -138,6 +251,43 @@ tests/                  # Unit and integration tests
 
 4. **Commit changes** with meaningful messages
 
+## Development Milestones
+
+### Phase 1: Foundation ✅ COMPLETED
+- [x] Express.js + TypeScript setup
+- [x] Database setup (PostgreSQL + Prisma)
+- [x] Authentication module (JWT, login)
+- [x] Error handling & validation middleware
+
+### Phase 2: Core Features ✅ COMPLETED
+- [x] Employee module (CRUD operations)
+- [x] Advanced filtering and search
+- [x] Employee repository and service layer
+- [x] Pagination support
+- [x] Soft deletion support
+- [x] Unit tests for employee service
+
+### Phase 3: Analytics 🚀 IN PROGRESS
+- [x] Analytics module implementation
+- [x] 11 Analytics endpoints
+- [x] Aggregation queries for insights
+- [x] Unit tests for analytics service
+- [ ] Integration tests
+- [ ] Seed script for 10,000 employees
+
+### Phase 4: AI Insights & Seeding (Coming Soon)
+- [ ] Insights module (query mapping)
+- [ ] Seed script for 10,000 employees
+- [ ] Integration tests
+- [ ] Performance optimization
+
+### Phase 5: Production Ready (Coming Soon)
+- [ ] Documentation
+- [ ] API documentation (Swagger/OpenAPI)
+- [ ] Performance testing
+- [ ] Security review
+- [ ] Deployment setup
+
 ## Error Handling
 
 The application uses centralized error handling with custom error classes:
@@ -165,12 +315,14 @@ JWT-based authentication:
 - Protected routes validated via authMiddleware
 - Token expiry: 7 days (configurable)
 
-## Next Steps (Phase 2)
+## Next Steps (Phase 4)
 
-- Employee CRUD operations
-- Advanced filtering and search
-- Pagination support
-- Employee soft deletion
+- AI Insights module implementation
+- Query mapping for natural language questions
+- Seed script for 10,000 realistic employees
+- Integration tests
+- Performance optimization
+- API documentation (Swagger/OpenAPI)
 
 ## Security Notes
 

@@ -9,7 +9,7 @@ export interface JwtPayload {
 
 export class JwtService {
   static generateToken(payload: JwtPayload): string {
-    return jwt.sign({id: payload}, config.jwtSecret, { expiresIn: config.jwtExpiry });
+    return jwt.sign(payload, config.jwtSecret, { expiresIn: config.jwtExpiry });
   }
 
   static verifyToken(token: string): JwtPayload {

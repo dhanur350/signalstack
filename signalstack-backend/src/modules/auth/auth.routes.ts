@@ -5,5 +5,6 @@ const router = Router();
 
 router.post('/login', AuthController.login);
 router.post('/verify', AuthController.verifyToken);
+router.post('/register', AuthController.register);
 
 export const authRoutes = router;

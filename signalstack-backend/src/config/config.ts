@@ -7,7 +7,7 @@ type Config = {
   nodeEnv: string;
   databaseUrl: string;
   jwtSecret: string;
-  jwtExpiry: string;
+  jwtExpiry: any;
   corsOrigin: string;
 };
 
