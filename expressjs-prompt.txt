@@ -1,0 +1,137 @@
+Build a production-grade Employee Salary Management backend system using Express.js and TypeScript for an engineering assessment.
+
+Business Context:
+ACME organization manages salary data for 10,000 employees across multiple countries using spreadsheets. The current process is difficult to maintain, error-prone, and lacks analytical visibility.
+
+Goal:
+Build a scalable backend system that allows HR managers to:
+
+* manage employee salary records
+* search and filter employees efficiently
+* analyze organizational compensation data
+* answer compensation-related business questions
+* support future scalability
+
+Core Features:
+
+1. Authentication
+
+* JWT authentication
+* HR manager login
+* protected APIs
+
+2. Employee Management
+   Employee fields:
+
+* employeeId
+* firstName
+* lastName
+* email
+* department
+* role/title
+* country
+* salary
+* currency
+* employmentStatus
+* joiningDate
+
+Employee operations:
+
+* create employee
+* update employee
+* soft delete employee
+* fetch employee by id
+* paginated employee listing
+* advanced filtering
+* sorting
+* search support
+
+3. Salary Analytics
+   Provide APIs for:
+
+* total compensation spend
+* average salary by department
+* average salary by country
+* highest paid departments
+* salary distribution
+* active vs inactive employee count
+* top earners
+
+4. AI-Assisted Insights
+   Build a lightweight AI insights module that can answer questions such as:
+
+* Which department has highest average salary?
+* How many employees earn above X?
+* Which country has highest payroll cost?
+* Top 5 highest paid employees
+
+The implementation can use:
+
+* semantic query mapping
+* prompt-to-query translation
+* predefined AI-assisted analytics logic
+
+Technical Stack:
+
+* Node.js
+* Express.js
+* TypeScript
+* PostgreSQL
+* Prisma ORM
+* Zod validation
+* JWT authentication
+* Pino logger
+* Docker support
+
+Architecture Expectations:
+
+* modular scalable architecture
+* feature-based modules
+* thin controllers
+* service layer separation
+* centralized error handling
+* request validation
+* reusable utilities
+* environment-based configuration
+* production-grade folder structure
+
+Performance Considerations:
+The system should support 10,000 employees efficiently.
+Include:
+
+* pagination
+* indexed database fields
+* optimized queries
+* aggregation queries
+* scalable filtering/search strategy
+
+Testing Expectations:
+
+* meaningful unit tests
+* deterministic tests
+* service layer coverage
+* validation testing
+
+Seeding:
+Create seed scripts for 10,000 realistic employees across:
+
+* multiple departments
+* multiple countries
+* varying salary ranges
+* realistic job titles
+
+Important:
+Do NOT generate the entire project at once.
+
+Work incrementally.
+
+First provide:
+
+1. architecture plan
+2. module breakdown
+3. folder structure
+4. database schema design
+5. API planning
+6. development milestones
+
+Then wait for confirmation before continuing implementation.

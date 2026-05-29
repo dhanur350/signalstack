@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Manager {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  employeesCreated Employee[] @relation("createdBy")
+  employeesUpdated Employee[] @relation("updatedBy")
+  salaryHistory    SalaryHistory[] @relation("changedBy")
+
+  @@map("managers")
+}
+
+model Employee {
+  id                String      @id @default(cuid())
+  employeeId        String      @unique
+  firstName         String
+  lastName          String
+  email             String      @unique
+  department        String
+  role              String
+  country           String
+  salary            Decimal     @db.Decimal(12, 2)
+  currency          String      @default("USD")
+  employmentStatus  String      @default("ACTIVE") // ACTIVE, INACTIVE
+  joiningDate       DateTime
+  isDeleted         Boolean     @default(false)
+  deletedAt         DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  // Foreign keys
+  createdById       String
+  updatedById       String
+  createdBy         Manager     @relation("createdBy", fields: [createdById], references: [id])
+  updatedBy         Manager     @relation("updatedBy", fields: [updatedById], references: [id])
+
+  // Relations
+  salaryHistory     SalaryHistory[]
+
+  // Indexes for performance
+  @@index([department])
+  @@index([country])
+  @@index([employmentStatus])
+  @@index([email])
+  @@index([salary])
+  @@index([isDeleted])
+  @@index([createdAt])
+
+  @@map("employees")
+}
+
+model SalaryHistory {
+  id            String   @id @default(cuid())
+  employeeId    String
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  previousSalary Decimal @db.Decimal(12, 2)
+  newSalary     Decimal  @db.Decimal(12, 2)
+  changedAt     DateTime @default(now())
+  changedById   String
+  changedBy     Manager  @relation("changedBy", fields: [changedById], references: [id])
+
+  @@index([employeeId])
+  @@index([changedAt])
+
+  @@map("salary_history")
+}
